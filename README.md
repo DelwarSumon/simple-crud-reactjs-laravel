@@ -74,6 +74,12 @@ This is a basic CRUD (Create, Read, Update, Delete) application built with React
 
 [React JS Documentation](https://react.dev/learn)
 
+[Material UI Documentation](https://mui.com/material-ui/getting-started/)
+
+[Axios Documentation](https://axios-http.com/docs/intro)
+
+[React Toastify Documentation](https://fkhadra.github.io/react-toastify/introduction/)
+
 [Laravel Documentation](https://laravel.com/docs/)
 
 ## Screenshots
