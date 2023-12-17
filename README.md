@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/DelwarSumon/chrome-extension-calculator"><img src="https://github.com/DelwarSumon/chrome-extension-calculator/blob/main/assets/images/icon.png?raw=true" style="width:150px; height:auto;"></a></p>
+<p align="center"><a href="https://github.com/DelwarSumon/simple-crud-reactjs-laravel"><img src="https://github.com/DelwarSumon/simple-crud-reactjs-laravel/blob/main/frontend/public/reactjs-laravel.jpg?raw=true" style="width:100%; height:auto;"></a></p>
 
 ## Getting Started with Calculator Extension for Google Chrome  
 
@@ -64,7 +64,7 @@ php artisan migrate
 
 ## Screenshots
 
-<img src="https://github.com/DelwarSumon/chrome-extension-calculator/blob/main/assets/images/extension.png?raw=true">
+<img src="https://github.com/DelwarSumon/simple-crud-reactjs-laravel/blob/main/assets/images/extension.png?raw=true">
 
 **Have FUN**
 

@@ -6,15 +6,18 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from "react";
 import apiService from '../services/apiService';
+import { toast } from 'react-toastify';
 
 const Form = ({ open, handleClose, formData }) => {
-    const [formValues, setFormValues] = useState({
+    const [validationErrors, setValidationErrors] = useState({});
+    const generateInitialState = () => ({
         name: '',
         email: '',
         message: '',
-        ...formData, // Spread existing formData if not null
     });
+    const [formValues, setFormValues] = useState(generateInitialState());
     useEffect(() => {
+        setValidationErrors({});
         setFormValues({
             name: '',
             email: '',
@@ -30,57 +33,79 @@ const Form = ({ open, handleClose, formData }) => {
     
     const handleFormSave = async () => {
         try {
-            console.log('formValues:', formValues);
-            if (formData.id) {
+            if (formData && formData.id) {
                 // Update
-                // setFormValues({ id: formData.id, ...formValues })
                 const response = await apiService.put(`/form-data/${formData.id}`, formValues);
-                console.log('Data saved successfully:', response);
+                if (response.message) {
+                    toast.success(response.message);
+                }
             } else {
                 // Create
                 const response = await apiService.post('/form-data', formValues);
-                console.log('Data saved successfully:', response);
+                if (response.message) {
+                    toast.success(response.message);
+                }
             }
-            // console.log('Data saved successfully:', response);
+            // After saving, reset form values
+            setFormValues(generateInitialState());
             handleClose();
         } catch (error) {
-            console.error('Error creating data:', error);
+            if (error.response && error.response.status === 422) {
+                // Handle validation errors from the server
+                setValidationErrors(error.response.data.errors);
+            }
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error('Error saving data.');
+            }
         }
     };
 
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>{formData ? 'Edit Form' : 'Add Form'}</DialogTitle>
-            <DialogContent>
-                <TextField
-                name="name"
-                label="Name"
-                value={formValues.name}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                />
-                <TextField
-                name="email"
-                label="Email"
-                value={formValues.email}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                />
-                <TextField
-                name="message"
-                label="Message"
-                value={formValues.message}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleFormSave}>Save</Button>
-            </DialogActions>
+                <DialogContent>
+                    <TextField
+                        name="name"
+                        label="Name"
+                        value={formValues.name}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                        required
+                        error={!!validationErrors.name}
+                        helperText={validationErrors.name || ''}
+                    />
+                    <TextField
+                        name="email"
+                        label="Email"
+                        value={formValues.email}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                        required
+                        error={!!validationErrors.email}
+                        helperText={validationErrors.email || ''}
+                    />
+                    <TextField
+                        name="message"
+                        label="Message"
+                        value={formValues.message}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                        multiline
+                        rows={5}
+                        required
+                        error={!!validationErrors.message}
+                        helperText={validationErrors.message || ''}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleFormSave}>Save</Button>
+                </DialogActions>
             </Dialog>
     );
 };

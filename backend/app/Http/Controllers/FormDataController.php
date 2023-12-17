@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\FormData;
 use Illuminate\Http\Request;
-
-use function Psy\debug;
-
+use Illuminate\Validation\ValidationException;
 class FormDataController extends Controller
 {
     public function index()
@@ -16,23 +14,34 @@ class FormDataController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'message' => 'required|string',
-        ]);
+    {   
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email',
+                'message' => 'required|string',
+            ]);
 
-        $formData = FormData::create($request->all());
-        return response()->json($formData, 201);
+            $formData = FormData::create($request->all());
+            return response()->json(['message' => 'Data saved successfully.', 'data' => $formData], 201);
+        } catch (ValidationException $e) {
+            // Handle validation errors
+            return response()->json(['message' => $e->getMessage(), 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
-    public function show(FormData $formData)
+    public function show($id)
     {
-        return $formData;
+        try {
+            return FormData::findOrFail($id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
-    public function update(Request $request, FormData $formData)
+    public function update(Request $request, $id)
     {
         try {
             $request->validate([
@@ -40,20 +49,24 @@ class FormDataController extends Controller
                 'email' => 'required|email',
                 'message' => 'required|string',
             ]);
-            $formData->update([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'message' => $request->input('message'),
-            ]);
-            return response()->json($formData, 200);
+            $formData = FormData::find($id);
+            $formData->fill($request->all())->save();
+            return response()->json(['message' => 'Data saved successfully.', 'data' => $formData], 200);
+        } catch (ValidationException $e) {
+            // Handle validation errors
+            return response()->json(['message' => $e->getMessage(), 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function destroy(FormData $formData)
+    public function destroy($id)
     {
-        $formData->delete();
-        return response()->json(null, 204);
+        try {
+            FormData::destroy($id);
+            return response()->json(['message' => 'Data deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }
