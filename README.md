@@ -25,7 +25,7 @@ This is a basic CRUD (Create, Read, Update, Delete) application built with React
   - API routes for CRUD operations
     
 ## Installation Procedure
-- ** Git clone:**
+- **Git clone:**
   - git clone https://github.com/DelwarSumon/simple-crud-reactjs-laravel.git
   - change your directory to simple-crud-reactjs-laravel (Ex: `cd simple-crud-reactjs-laravel`)
 
