@@ -67,7 +67,7 @@ This is a basic CRUD (Create, Read, Update, Delete) application built with React
             └───axiosInstance.js
 │   
 └───backend
-    └─── See Laravel directory structure (https://laravel.com/docs/10.x/structure)
+    └─── See Laravel directory structure (https://laravel.com/docs/structure)
 ```
 
 ## Documentation
