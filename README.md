@@ -52,6 +52,8 @@ This is a basic CRUD (Create, Read, Update, Delete) application built with React
 │   
 └───frontend
     └───src
+        │   App.js
+        │   index.js
         └───common  
             └───LoaderContext.js
         └───components
@@ -63,8 +65,6 @@ This is a basic CRUD (Create, Read, Update, Delete) application built with React
             └───apiService.js
         └───utils
             └───axiosInstance.js
-        │   App.js
-        └───index.js
 │   
 └───backend
     └─── See Laravel directory structure (https://laravel.com/docs/10.x/structure)
